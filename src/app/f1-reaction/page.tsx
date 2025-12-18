@@ -521,29 +521,41 @@ export default function F1ReactionPage() {
     tryVibrate(30);
     const url = typeof window !== "undefined" ? window.location.href : "";
     const rating = getRating(reactionTime);
-    const text = `${rating.emoji} I got ${reactionTime}ms in the F1 Reaction Game - ${rating.label}!
+    const shareText = `${rating.emoji} I just hit ${reactionTime}ms! Think you can beat that? 🏁`;
 
-Can you beat me? 🏎️
+    const shareData = {
+      title: "F1 Start Reaction Challenge",
+      text: shareText,
+      url: url,
+    };
 
-${url}
-
-#F1 #Formula1 #ReactionTime #F1Game`;
-
+    // Check if Web Share API is available
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
-        await navigator.share({ text });
-        setShareStatus("Shared! 🎉");
-      } catch {
-        setShareStatus("");
-      }
-    } else if (typeof navigator !== "undefined" && navigator.clipboard) {
-      try {
-        await navigator.clipboard.writeText(text);
-        setShareStatus("Copied! 📋");
+        await navigator.share(shareData);
+        setShareStatus("Challenge sent! 🎉");
         setTimeout(() => setShareStatus(""), 2000);
-      } catch {
-        setShareStatus("Failed");
+      } catch (error) {
+        // User cancelled - don't show error
+        if (error instanceof Error && error.name === "AbortError") {
+          return;
+        }
+        // Share failed - try WhatsApp as fallback
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(
+          shareText + " " + url
+        )}`;
+        window.open(whatsappUrl, "_blank");
+        setShareStatus("Opening WhatsApp...");
+        setTimeout(() => setShareStatus(""), 2000);
       }
+    } else {
+      // Desktop fallback: Open WhatsApp Web share link
+      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(
+        shareText + " " + url
+      )}`;
+      window.open(whatsappUrl, "_blank");
+      setShareStatus("Opening WhatsApp...");
+      setTimeout(() => setShareStatus(""), 2000);
     }
   }, [reactionTime]);
 
@@ -1014,7 +1026,7 @@ ${url}
                 animation: "fadeInUp 0.4s ease-out 0.5s both",
               }}
             >
-              {shareStatus || "📤 Share Result"}
+              {shareStatus || "🏁 Challenge a Friend"}
             </button>
 
             <div
