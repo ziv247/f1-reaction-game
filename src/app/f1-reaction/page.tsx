@@ -9,6 +9,7 @@ type GameState =
   | "SEQUENCE"
   | "ARMED"
   | "GO"
+  | "TAPPED"
   | "RESULT"
   | "FALSE_START";
 
@@ -327,6 +328,8 @@ export default function F1ReactionPage() {
   const falseStartTimerRef = useRef<NodeJS.Timeout | null>(null);
   const countUpRef = useRef<NodeJS.Timeout | null>(null);
   const rippleIdRef = useRef<number>(0);
+  const lastTapTimeRef = useRef<number>(0);
+  const tappedTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Load saved data on mount
   useEffect(() => {
@@ -342,12 +345,28 @@ export default function F1ReactionPage() {
       if (armedTimerRef.current) clearTimeout(armedTimerRef.current);
       if (falseStartTimerRef.current) clearTimeout(falseStartTimerRef.current);
       if (countUpRef.current) clearTimeout(countUpRef.current);
+      if (tappedTimerRef.current) clearTimeout(tappedTimerRef.current);
     };
   }, []);
 
+  // Transition from TAPPED to RESULT after 1 second
+  useEffect(() => {
+    if (gameState === "TAPPED") {
+      tappedTimerRef.current = setTimeout(() => {
+        setGameState("RESULT");
+      }, 1000);
+      return () => {
+        if (tappedTimerRef.current) {
+          clearTimeout(tappedTimerRef.current);
+          tappedTimerRef.current = null;
+        }
+      };
+    }
+  }, [gameState]);
+
   // Animated count-up effect for reaction time
   useEffect(() => {
-    if (gameState === "RESULT" && reactionTime > 0) {
+    if (gameState === "TAPPED" && reactionTime > 0) {
       const duration = 400;
       const steps = 20;
       const increment = reactionTime / steps;
@@ -450,6 +469,13 @@ export default function F1ReactionPage() {
 
   const handleTap = useCallback(
     (e?: React.MouseEvent | React.TouchEvent) => {
+      // Debounce to prevent double-tap on mobile (touchstart + click)
+      const now = performance.now();
+      if (now - lastTapTimeRef.current < 100) {
+        return;
+      }
+      lastTapTimeRef.current = now;
+
       // Add ripple effect
       if (e && "clientX" in e) {
         addRipple(e.clientX, e.clientY);
@@ -493,9 +519,13 @@ export default function F1ReactionPage() {
             tryVibrate(50); // Success tap
           }
 
-          setGameState("RESULT");
+          setGameState("TAPPED");
           break;
         }
+
+        case "TAPPED":
+          // Ignore taps during the 1-second transition
+          break;
 
         case "RESULT":
           tryVibrate(20);
@@ -896,6 +926,80 @@ export default function F1ReactionPage() {
             >
               TAP NOW!
             </p>
+          </div>
+        )}
+
+        {/* TAPPED State - Brief display before full result */}
+        {gameState === "TAPPED" && (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              animation: "fadeInScale 0.2s ease-out",
+            }}
+          >
+            {isNewRecord && (
+              <div
+                style={{
+                  fontSize: "clamp(2rem, 8vw, 3rem)",
+                  marginBottom: "8px",
+                  animation: "trophy 0.6s ease-out",
+                }}
+              >
+                🏆
+              </div>
+            )}
+
+            <p
+              style={{
+                fontSize: "clamp(5rem, 25vw, 9rem)",
+                fontWeight: 900,
+                color: "#fff",
+                lineHeight: 1,
+                animation: "countUp 0.4s ease-out",
+              }}
+            >
+              {displayTime}
+              <span style={{ fontSize: "0.4em", color: "#888" }}>ms</span>
+            </p>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                marginTop: "16px",
+                animation: "fadeInUp 0.4s ease-out 0.2s both",
+              }}
+            >
+              <span style={{ fontSize: "clamp(1.5rem, 6vw, 2rem)" }}>
+                {getRating(reactionTime).emoji}
+              </span>
+              <span
+                style={{
+                  fontSize: "clamp(1.2rem, 5vw, 1.6rem)",
+                  fontWeight: 600,
+                  color: getRating(reactionTime).color,
+                }}
+              >
+                {getRating(reactionTime).label}
+              </span>
+            </div>
+
+            {isNewRecord && (
+              <p
+                style={{
+                  color: "#ffd700",
+                  fontWeight: 700,
+                  fontSize: "clamp(1rem, 4vw, 1.2rem)",
+                  marginTop: "16px",
+                  animation: "bounceIn 0.5s ease-out 0.3s both",
+                }}
+              >
+                ✨ NEW PERSONAL BEST! ✨
+              </p>
+            )}
           </div>
         )}
 
