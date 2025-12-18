@@ -1,0 +1,10 @@
+# F1 Reaction Game - robots.txt
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://f1-reaction-game.vercel.app/sitemap.xml
+
+# Crawl-delay for politeness (optional)
+Crawl-delay: 1
+

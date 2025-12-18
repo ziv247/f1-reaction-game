@@ -1,0 +1,118 @@
+# F1 Start Reaction Game - Project Rules
+
+## Project Overview
+
+This is a mobile-first Formula 1 themed Reaction Time browser game. Players practice F1 race starts by tapping when the lights go out.
+
+## Tech Stack
+
+- **Framework**: Next.js 16+ (App Router)
+- **Language**: TypeScript
+- **Styling**: Pure CSS (inline styles, no external UI libraries)
+- **State Management**: React hooks (useState, useEffect, useCallback, useRef)
+- **Package Manager**: npm (not yarn)
+- **No Backend**: All data stored in localStorage
+
+## Project Structure
+
+```
+/src/app/
+  ├── layout.tsx      # Root layout with viewport meta for mobile
+  ├── globals.css     # Minimal global styles
+  ├── page.tsx        # Redirects to /f1-reaction
+  └── f1-reaction/
+      └── page.tsx    # Main game component (client component)
+```
+
+## Game State Machine
+
+States: `IDLE` → `SEQUENCE` → `ARMED` → `GO` → `RESULT`
+With `FALSE_START` for early taps during SEQUENCE or ARMED.
+
+## Key Implementation Details
+
+### Light Sequence Logic
+
+- 5 lights turn on one-by-one with 350ms intervals
+- **IMPORTANT**: When using `setLights()` inside a loop/timer, capture the index before any async operations:
+  ```typescript
+  const currentIndex = lightIndex; // Capture before increment
+  setLights((prev) => {
+    const newLights = [...prev];
+    newLights[currentIndex] = true; // Use captured value
+    return newLights;
+  });
+  lightIndex++;
+  ```
+- After all lights on: random delay 1000-3500ms, then GO
+
+### React Best Practices Applied
+
+1. **Avoid Math.random() during render** - Use useState with lazy initializer or generate outside component
+2. **Capture loop variables** before async callbacks to avoid closure issues
+3. **Clean up timers** in useEffect cleanup functions
+4. **Use performance.now()** for precise reaction time measurement
+
+### Mobile Optimizations
+
+- `touch-action: manipulation` to prevent double-tap zoom
+- `user-select: none` to prevent text selection
+- Haptic feedback via `navigator.vibrate()` with different patterns
+- Large tap targets (min 48px)
+- Full viewport layout with `position: fixed; inset: 0`
+
+### localStorage Keys
+
+- `f1-reaction-best-time` - Personal best in ms
+- `f1-reaction-streak` - Consecutive successful attempts
+- `f1-reaction-plays` - Total play count
+
+### Rating Tiers
+
+| Threshold | Label              | Emoji |
+| --------- | ------------------ | ----- |
+| < 150ms   | Lightning Reflexes | ⚡    |
+| 150-180ms | F1 Elite           | 🏁    |
+| 180-250ms | Pro Driver         | 🚦    |
+| 250-330ms | Solid Start        | 👍    |
+| 330-500ms | Warming Up         | 🔥    |
+| > 500ms   | Keep Practicing    | 💪    |
+
+### Animations
+
+CSS keyframes defined in component:
+
+- `fadeInUp`, `fadeInScale` - Entrance animations
+- `goPulse` - Pulsing GO text with glow
+- `shake` - False start screen shake
+- `lightOn` - Pop effect for lights
+- `confetti` - Celebration particles
+- `trophy` - Bouncing trophy on new record
+- `ripple` - Tap feedback effect
+
+### Share Feature
+
+- Uses Web Share API if available
+- Falls back to clipboard copy
+- Share text: `"{emoji} My F1 start reaction: {time}ms - {rating}! Can you beat me? 🏎️ {url}"`
+
+## Common Gotchas
+
+1. **Closure issues with timers**: Always capture loop variables before setTimeout/setInterval callbacks
+2. **React StrictMode**: Development mode may double-invoke effects - ensure cleanup is proper
+3. **Vibration API**: Only works on supported devices, always check `navigator.vibrate` exists
+4. **Touch events**: Use both onClick and onTouchStart for reliable mobile tap detection
+
+## Running the Project
+
+```bash
+cd /Users/ziv/F1
+npm run dev      # Development server at http://localhost:3000
+npm run build    # Production build
+npm run start    # Production server
+```
+
+## Game URL
+
+- Development: http://localhost:3000/f1-reaction
+- Root `/` redirects to `/f1-reaction`
