@@ -651,6 +651,8 @@ export default function F1ReactionPage() {
           touchAction: "manipulation",
           cursor: "default",
           padding: "20px",
+          paddingBottom:
+            gameState === "RESULT" && totalPlays >= 2 ? "80px" : "20px",
           overflow: "hidden",
         }}
       >
@@ -1134,9 +1136,6 @@ export default function F1ReactionPage() {
               {shareStatus || "🏁 Challenge a Friend"}
             </button>
 
-            {/* Ad unit - shown from 2nd completed run onwards */}
-            {totalPlays >= 2 && <AdSlot style={{ marginTop: "24px" }} />}
-
             <div
               style={{
                 marginTop: "28px",
@@ -1237,6 +1236,9 @@ export default function F1ReactionPage() {
           </div>
         )}
       </div>
+
+      {/* Fixed bottom ad banner - shown only on RESULT screen from 2nd completed run onwards */}
+      {gameState === "RESULT" && totalPlays >= 2 && <AdSlot />}
     </>
   );
 }

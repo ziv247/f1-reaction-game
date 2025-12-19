@@ -12,15 +12,22 @@ interface AdSlotProps {
  * Renders a responsive AdSense ad unit.
  * - Lazy-loads the AdSense script
  * - Guards against duplicate push() calls
- * - Shows subtle fallback if ad blocked/fails
+ * - Hides completely if ad blocked/fails or on localhost
  */
 export function AdSlot({ style }: AdSlotProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const adRef = useRef<HTMLModElement>(null);
   const pushCalledRef = useRef(false);
-  const [adBlocked, setAdBlocked] = useState(false);
+  const [adLoaded, setAdLoaded] = useState(false);
+  const [checkComplete, setCheckComplete] = useState(false);
+
+  // Check if running on localhost (ads don't work locally)
+  const isLocalhost = typeof window !== "undefined" && 
+    (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
 
   useEffect(() => {
-    // Skip if already pushed or disabled
+    // Skip on localhost or if disabled
+    if (isLocalhost) return;
     if (pushCalledRef.current) return;
     if (!adsenseConfig.isEnabled) return;
     if (typeof window === "undefined") return;
@@ -37,25 +44,30 @@ export function AdSlot({ style }: AdSlotProps) {
       }
     }, 100);
 
-    // Check if ad loaded after 3 seconds
+    // Check if ad loaded after 2 seconds
     const checkTimer = setTimeout(() => {
-      if (adRef.current) {
-        const height = adRef.current.offsetHeight;
-        // If height is 0 or very small, ad was likely blocked
-        if (height < 10) {
-          setAdBlocked(true);
+      setCheckComplete(true);
+      if (containerRef.current) {
+        // Check if any iframe with actual content was inserted
+        const iframe = containerRef.current.querySelector('iframe');
+        const insElement = adRef.current;
+        const hasContent = iframe && iframe.offsetHeight > 0;
+        const insHasHeight = insElement && insElement.offsetHeight > 10;
+        
+        if (hasContent || insHasHeight) {
+          setAdLoaded(true);
         }
       }
-    }, 3000);
+    }, 2000);
 
     return () => {
       clearTimeout(pushTimer);
       clearTimeout(checkTimer);
     };
-  }, []);
+  }, [isLocalhost]);
 
-  // Kill switch - render nothing
-  if (!adsenseConfig.isEnabled) {
+  // Don't render on localhost, if disabled, or if check completed without ad loading
+  if (isLocalhost || !adsenseConfig.isEnabled || (checkComplete && !adLoaded)) {
     return null;
   }
 
@@ -63,57 +75,39 @@ export function AdSlot({ style }: AdSlotProps) {
     <>
       <AdSenseScript />
       <div
+        ref={containerRef}
         style={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
           width: "100%",
-          maxWidth: "400px",
-          minHeight: "100px",
+          height: "60px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          background: "rgba(0,0,0,0.9)",
+          borderTop: "1px solid rgba(255,255,255,0.1)",
+          zIndex: 1000,
+          // Hide until we confirm ad loaded (prevents white flash)
+          opacity: adLoaded ? 1 : 0,
+          transition: "opacity 0.3s ease",
           ...style,
         }}
       >
-        {adBlocked ? (
-          // Subtle fallback - no shaming, just empty space with minimal visual
-          <div
-            style={{
-              width: "100%",
-              height: "100px",
-              background: "rgba(255,255,255,0.02)",
-              borderRadius: "8px",
-              border: "1px dashed rgba(255,255,255,0.1)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <span
-              style={{
-                fontSize: "12px",
-                color: "rgba(255,255,255,0.2)",
-              }}
-            >
-              ⚡
-            </span>
-          </div>
-        ) : (
-          <ins
-            ref={adRef}
-            className="adsbygoogle"
-            style={{
-              display: "block",
-              width: "100%",
-              minWidth: "320px",
-              maxWidth: "400px",
-              height: "auto",
-              minHeight: "100px",
-            }}
-            data-ad-client={adsenseConfig.clientId}
-            data-ad-slot={adsenseConfig.slotId}
-            data-ad-format="auto"
-            data-full-width-responsive="true"
-          />
-        )}
+        <ins
+          ref={adRef}
+          className="adsbygoogle"
+          style={{
+            display: "block",
+            width: "100%",
+            maxWidth: "728px",
+            height: "50px",
+          }}
+          data-ad-client={adsenseConfig.clientId}
+          data-ad-slot={adsenseConfig.slotId}
+          data-ad-format="horizontal"
+        />
       </div>
     </>
   );
