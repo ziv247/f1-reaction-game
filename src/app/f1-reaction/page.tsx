@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { AdSlot } from "@/components/ads";
 
 // ============ Types ============
 type GameState =
@@ -1132,6 +1133,9 @@ export default function F1ReactionPage() {
             >
               {shareStatus || "🏁 Challenge a Friend"}
             </button>
+
+            {/* Ad unit - shown from 2nd completed run onwards */}
+            {totalPlays >= 2 && <AdSlot style={{ marginTop: "24px" }} />}
 
             <div
               style={{
