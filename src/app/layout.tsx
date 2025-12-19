@@ -5,7 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://f1-reaction-game.vercel.app'),
+  metadataBase: new URL('https://reactionf1.com'),
   title: {
     default: 'F1 Start Reaction Game - Test Your Formula 1 Reflexes',
     template: '%s | F1 Reaction Game'
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://f1-reaction-game.vercel.app',
+    url: 'https://reactionf1.com',
     siteName: 'F1 Reaction Game',
     title: 'F1 Start Reaction Game - Can You Beat the Lights?',
     description: 'Test your Formula 1 race start reaction time! Compare your reflexes with real F1 drivers. Free online game.',
@@ -73,7 +73,7 @@ const jsonLd = {
   description: 'Test your Formula 1 race start reaction time and compare with real F1 drivers',
   applicationCategory: 'Game',
   operatingSystem: 'Web Browser',
-  url: 'https://f1-reaction-game.vercel.app',
+  url: 'https://reactionf1.com',
   offers: {
     '@type': 'Offer',
     price: '0',

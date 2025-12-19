@@ -141,7 +141,7 @@ export default async function Image() {
           }}
         >
           <span style={{ display: 'flex' }}>🏎️</span>
-          <span style={{ display: 'flex' }}>f1-reaction-game.vercel.app</span>
+          <span style={{ display: 'flex' }}>reactionf1.com</span>
         </div>
       </div>
     ),
