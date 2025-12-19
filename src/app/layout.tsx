@@ -5,40 +5,53 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://reactionf1.com'),
+  metadataBase: new URL("https://reactionf1.com"),
   title: {
-    default: 'F1 Start Reaction Game - Test Your Formula 1 Reflexes',
-    template: '%s | F1 Reaction Game'
+    default: "F1 Start Reaction Game - Test Your Formula 1 Reflexes",
+    template: "%s | F1 Reaction Game",
   },
-  description: 'Can you beat the F1 lights? Test your Formula 1 race start reaction time and compare with real F1 drivers. Free online reaction test game.',
+  description:
+    "Can you beat the F1 lights? Test your Formula 1 race start reaction time and compare with real F1 drivers. Free online reaction test game.",
   keywords: [
-    'F1 reaction time', 'Formula 1 game', 'reaction test', 
-    'F1 start lights', 'racing reflexes', 'F1 reaction game',
-    'formula one reaction', 'race start simulator', 'F1 lights out',
-    'reaction time test', 'F1 driver reaction', 'racing game'
+    "F1 reaction time",
+    "Formula 1 game",
+    "reaction test",
+    "F1 start lights",
+    "racing reflexes",
+    "F1 reaction game",
+    "formula one reaction",
+    "race start simulator",
+    "F1 lights out",
+    "reaction time test",
+    "F1 driver reaction",
+    "racing game",
   ],
-  authors: [{ name: 'ziv247' }],
-  creator: 'ziv247',
+  authors: [{ name: "ziv247" }],
+  creator: "ziv247",
   openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: 'https://reactionf1.com',
-    siteName: 'F1 Reaction Game',
-    title: 'F1 Start Reaction Game - Can You Beat the Lights?',
-    description: 'Test your Formula 1 race start reaction time! Compare your reflexes with real F1 drivers. Free online game.',
-    images: [{
-      url: '/og-image.png',
-      width: 1200,
-      height: 630,
-      alt: 'F1 Reaction Game - Test Your Reflexes'
-    }]
+    type: "website",
+    locale: "en_US",
+    url: "https://reactionf1.com",
+    siteName: "F1 Reaction Game",
+    title: "F1 Start Reaction Game - Can You Beat the Lights?",
+    description:
+      "Test your Formula 1 race start reaction time! Compare your reflexes with real F1 drivers. Free online game.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "F1 Reaction Game - Test Your Reflexes",
+      },
+    ],
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'F1 Start Reaction Game - Can You Beat the Lights?',
-    description: 'Test your F1 race start reaction time! Compare with real F1 drivers.',
-    images: ['/og-image.png'],
-    creator: '@ziv247'
+    card: "summary_large_image",
+    title: "F1 Start Reaction Game - Can You Beat the Lights?",
+    description:
+      "Test your F1 race start reaction time! Compare with real F1 drivers.",
+    images: ["/og-image.png"],
+    creator: "@ziv247",
   },
   robots: {
     index: true,
@@ -46,16 +59,12 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
-  manifest: '/manifest.json',
-  icons: {
-    icon: '/favicon.ico',
-    apple: '/icon-192.png',
-  },
+  manifest: "/manifest.json",
 };
 
 export const viewport: Viewport = {
@@ -63,27 +72,28 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: '#e60000',
+  themeColor: "#e60000",
 };
 
 const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebApplication',
-  name: 'F1 Start Reaction Game',
-  description: 'Test your Formula 1 race start reaction time and compare with real F1 drivers',
-  applicationCategory: 'Game',
-  operatingSystem: 'Web Browser',
-  url: 'https://reactionf1.com',
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "F1 Start Reaction Game",
+  description:
+    "Test your Formula 1 race start reaction time and compare with real F1 drivers",
+  applicationCategory: "Game",
+  operatingSystem: "Web Browser",
+  url: "https://reactionf1.com",
   offers: {
-    '@type': 'Offer',
-    price: '0',
-    priceCurrency: 'USD'
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
   },
   aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.8',
-    ratingCount: '150'
-  }
+    "@type": "AggregateRating",
+    ratingValue: "4.8",
+    ratingCount: "150",
+  },
 };
 
 export default function RootLayout({
