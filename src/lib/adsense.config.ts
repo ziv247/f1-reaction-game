@@ -54,3 +54,4 @@ function getConfig(): AdsenseConfig {
 // Export singleton config
 export const adsenseConfig = getConfig();
 
+
