@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { AdSlot } from "@/components/ads";
 
 // ============ Types ============
 type GameState =
@@ -301,31 +300,262 @@ function ProgressToNextTier({
   );
 }
 
-// ============ Footer Component ============
-function Footer() {
+// ============ Content Section Component ============
+function ContentSection() {
   return (
-    <footer
-      onClick={(e) => e.stopPropagation()}
+    <section
       style={{
-        position: "fixed",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        padding: "12px 20px",
-        display: "flex",
-        justifyContent: "center",
-        gap: "24px",
-        fontSize: "12px",
-        color: "#666",
-        background: "linear-gradient(transparent, rgba(0,0,0,0.8))",
-        pointerEvents: "auto",
-        zIndex: 10,
+        background: "linear-gradient(180deg, #1a1a2e 0%, #0d0d0d 100%)",
+        padding: "60px 20px 100px",
+        color: "#fff",
       }}
     >
-      <a href="/privacy" style={{ color: "#888", textDecoration: "none" }}>Privacy</a>
-      <a href="/terms" style={{ color: "#888", textDecoration: "none" }}>Terms</a>
-      <a href="/contact" style={{ color: "#888", textDecoration: "none" }}>Contact</a>
-    </footer>
+      <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+        {/* How It Works */}
+        <h2
+          style={{
+            fontSize: "clamp(1.5rem, 5vw, 2rem)",
+            fontWeight: 700,
+            marginBottom: "24px",
+            color: "#fff",
+          }}
+        >
+          How It Works
+        </h2>
+        <ul
+          style={{
+            listStyle: "none",
+            padding: 0,
+            marginBottom: "48px",
+            color: "#ccc",
+            lineHeight: 1.8,
+          }}
+        >
+          <li
+            style={{
+              marginBottom: "12px",
+              paddingLeft: "28px",
+              position: "relative",
+            }}
+          >
+            <span style={{ position: "absolute", left: 0, color: "#ff6b35" }}>
+              🏎️
+            </span>
+            Tap the screen or click anywhere to start the light sequence
+          </li>
+          <li
+            style={{
+              marginBottom: "12px",
+              paddingLeft: "28px",
+              position: "relative",
+            }}
+          >
+            <span style={{ position: "absolute", left: 0, color: "#ff6b35" }}>
+              🔴
+            </span>
+            Watch as five red lights illuminate one by one, just like a real F1
+            start
+          </li>
+          <li
+            style={{
+              marginBottom: "12px",
+              paddingLeft: "28px",
+              position: "relative",
+            }}
+          >
+            <span style={{ position: "absolute", left: 0, color: "#ff6b35" }}>
+              ⏱️
+            </span>
+            After all lights are on, wait for a random delay (1-3.5 seconds)
+          </li>
+          <li
+            style={{
+              marginBottom: "12px",
+              paddingLeft: "28px",
+              position: "relative",
+            }}
+          >
+            <span style={{ position: "absolute", left: 0, color: "#ff6b35" }}>
+              💨
+            </span>
+            When the lights go out, tap as fast as you can - your reaction time
+            is measured in milliseconds
+          </li>
+          <li
+            style={{
+              marginBottom: "12px",
+              paddingLeft: "28px",
+              position: "relative",
+            }}
+          >
+            <span style={{ position: "absolute", left: 0, color: "#ff6b35" }}>
+              🚫
+            </span>
+            Tap too early and you get a false start - patience and timing are
+            key!
+          </li>
+        </ul>
+
+        {/* Why Reaction Time Matters */}
+        <h2
+          style={{
+            fontSize: "clamp(1.5rem, 5vw, 2rem)",
+            fontWeight: 700,
+            marginBottom: "24px",
+            color: "#fff",
+          }}
+        >
+          Why Reaction Time Matters in F1
+        </h2>
+        <p
+          style={{
+            color: "#ccc",
+            lineHeight: 1.8,
+            marginBottom: "20px",
+          }}
+        >
+          In Formula 1, the race start is one of the most critical moments. A
+          driver&apos;s reaction to the lights going out can mean the difference
+          between gaining positions or losing them. The top F1 drivers
+          consistently achieve reaction times between 150-250 milliseconds -
+          faster than the blink of an eye. This incredible speed comes from
+          years of training, focus, and the ability to anticipate without
+          jumping the start.
+        </p>
+        <p
+          style={{
+            color: "#ccc",
+            lineHeight: 1.8,
+            marginBottom: "48px",
+          }}
+        >
+          Legendary starts have defined championships. Whether it&apos;s Lewis
+          Hamilton&apos;s consistent launches or Max Verstappen&apos;s
+          aggressive getaways, reaction time combined with clutch control and
+          throttle modulation creates the perfect start. While this game tests
+          pure reaction, real F1 starts also require managing wheelspin,
+          avoiding collisions, and making split-second decisions about racing
+          lines - all within that first crucial second.
+        </p>
+
+        {/* Reaction Time Tiers */}
+        <h2
+          style={{
+            fontSize: "clamp(1.5rem, 5vw, 2rem)",
+            fontWeight: 700,
+            marginBottom: "24px",
+            color: "#fff",
+          }}
+        >
+          What is a Good Reaction Time?
+        </h2>
+        <p
+          style={{
+            color: "#ccc",
+            lineHeight: 1.8,
+            marginBottom: "24px",
+          }}
+        >
+          Human reaction time varies based on age, alertness, and practice. The
+          average person reacts to visual stimuli in about 250-300 milliseconds.
+          Professional athletes and trained gamers often achieve 150-200ms.
+          Here&apos;s how we rate your performance:
+        </p>
+
+        <div
+          style={{
+            background: "rgba(255,255,255,0.05)",
+            borderRadius: "16px",
+            overflow: "hidden",
+            marginBottom: "32px",
+          }}
+        >
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              padding: "16px 20px",
+              background: "rgba(255,255,255,0.05)",
+              fontWeight: 600,
+              fontSize: "14px",
+              color: "#888",
+            }}
+          >
+            <span>Time</span>
+            <span>Rating</span>
+            <span>What it means</span>
+          </div>
+          {[
+            {
+              range: "< 150ms",
+              label: "Lightning Reflexes",
+              emoji: "⚡",
+              desc: "Elite tier",
+            },
+            {
+              range: "150-180ms",
+              label: "F1 Elite",
+              emoji: "🏁",
+              desc: "Pro driver level",
+            },
+            {
+              range: "180-250ms",
+              label: "Pro Driver",
+              emoji: "🚦",
+              desc: "Excellent reflexes",
+            },
+            {
+              range: "250-330ms",
+              label: "Solid Start",
+              emoji: "👍",
+              desc: "Above average",
+            },
+            {
+              range: "330-500ms",
+              label: "Warming Up",
+              emoji: "🔥",
+              desc: "Room to improve",
+            },
+            {
+              range: "> 500ms",
+              label: "Keep Practicing",
+              emoji: "💪",
+              desc: "Keep at it!",
+            },
+          ].map((tier) => (
+            <div
+              key={tier.label}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr",
+                padding: "14px 20px",
+                borderTop: "1px solid rgba(255,255,255,0.1)",
+                fontSize: "14px",
+                color: "#ccc",
+              }}
+            >
+              <span style={{ fontFamily: "monospace", color: "#ff6b35" }}>
+                {tier.range}
+              </span>
+              <span>
+                {tier.emoji} {tier.label}
+              </span>
+              <span style={{ color: "#888" }}>{tier.desc}</span>
+            </div>
+          ))}
+        </div>
+
+        <p
+          style={{
+            color: "#888",
+            fontSize: "14px",
+            textAlign: "center",
+          }}
+        >
+          Practice regularly to improve your reaction time and climb the ranks!
+        </p>
+      </div>
+    </section>
   );
 }
 
@@ -359,6 +589,7 @@ export default function F1ReactionPage() {
   const rippleIdRef = useRef<number>(0);
   const lastTapTimeRef = useRef<number>(0);
   const tappedTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const gameAreaRef = useRef<HTMLDivElement>(null);
 
   // Load saved data on mount
   useEffect(() => {
@@ -618,12 +849,8 @@ export default function F1ReactionPage() {
     }
   }, [reactionTime]);
 
-  // Global event listeners
+  // Game area event listeners (keyboard)
   useEffect(() => {
-    const preventDefault = (e: TouchEvent) => {
-      if (e.touches.length > 1) e.preventDefault();
-    };
-
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === "Space" || e.code === "Enter") {
         e.preventDefault();
@@ -631,11 +858,9 @@ export default function F1ReactionPage() {
       }
     };
 
-    document.addEventListener("touchstart", preventDefault, { passive: false });
     document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.removeEventListener("touchstart", preventDefault);
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [handleTap]);
@@ -653,7 +878,9 @@ export default function F1ReactionPage() {
         <TapRipple key={ripple.id} x={ripple.x} y={ripple.y} />
       ))}
 
+      {/* Game Area - Full viewport height */}
       <div
+        ref={gameAreaRef}
         onClick={handleTap}
         onTouchStart={(e) => {
           if (
@@ -666,8 +893,7 @@ export default function F1ReactionPage() {
           }
         }}
         style={{
-          position: "fixed",
-          inset: 0,
+          minHeight: "100dvh",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -680,6 +906,7 @@ export default function F1ReactionPage() {
           cursor: "default",
           padding: "20px",
           paddingBottom: "60px",
+          position: "relative",
           overflow: "hidden",
         }}
       >
@@ -1262,13 +1489,35 @@ export default function F1ReactionPage() {
             )}
           </div>
         )}
+
+        {/* Scroll indicator on IDLE state */}
+        {gameState === "IDLE" && (
+          <div
+            style={{
+              position: "absolute",
+              bottom: "80px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "8px",
+              color: "#444",
+              fontSize: "12px",
+              animation: "fadeInUp 0.4s ease-out 0.6s both",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <span>Scroll down to learn more</span>
+            <span style={{ fontSize: "18px" }}>↓</span>
+          </div>
+        )}
       </div>
 
-      {/* Footer with legal links */}
-      <Footer />
+      {/* Educational Content Section */}
+      <ContentSection />
 
-      {/* Fixed bottom ad banner - shown only on RESULT screen from 2nd completed run onwards */}
-      {gameState === "RESULT" && totalPlays >= 2 && <AdSlot />}
+      {/* AdSense ad slots removed until approval is granted */}
     </>
   );
 }
